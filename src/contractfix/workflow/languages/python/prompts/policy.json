@@ -1,0 +1,63 @@
+{
+  "version": "contractfix-prompts",
+  "selection": "deterministic_tag_overlap",
+  "max_examples": 1,
+  "stages": {
+    "localize": {
+      "skills": [
+        "evidence",
+        "runtime_monitoring",
+        "localize_operation"
+      ],
+      "answer_tokens": 2048
+    },
+    "repair_obligations": {
+      "skills": [
+        "evidence",
+        "contract",
+        "nlc_derivation"
+      ],
+      "answer_tokens": 2048
+    },
+    "repair_obligation_review": {
+      "skills": [
+        "evidence",
+        "contract",
+        "nlc_review"
+      ],
+      "answer_tokens": 2048
+    },
+    "executable_contract_synthesis": {
+      "skills": [
+        "runtime_monitoring",
+        "contract",
+        "ec_witness"
+      ],
+      "answer_tokens": 2048
+    },
+    "executable_contract_conformance": {
+      "skills": [
+        "evidence",
+        "contract",
+        "ec_review"
+      ],
+      "answer_tokens": 2048
+    },
+    "patch": {
+      "skills": [
+        "patching",
+        "patch_version"
+      ],
+      "answer_tokens": 4096
+    },
+    "patch_nlc_conformance": {
+      "skills": [
+        "evidence",
+        "contract",
+        "patching",
+        "patch_nlc_review"
+      ],
+      "answer_tokens": 2048
+    }
+  }
+}

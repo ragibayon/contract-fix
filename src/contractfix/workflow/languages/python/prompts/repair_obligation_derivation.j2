@@ -1,0 +1,80 @@
+Recover one evidence-grounded REPAIR contract: specify the reported trigger and each requested observable
+outcome, without adding requirements the issue does not support.
+
+The output is a behavioral contract for one evidence-backed precondition and observable postcondition. It is not
+a description of the function's general intent, an implementation invariant, a root-cause analysis,
+or a proposed fix. Do not add behavior merely because it seems desirable or conventional.
+
+# Analysis checklist
+Before authoring the obligation, reason through these questions:
+1. What contract witness establishes the precondition before invocation?
+2. Which evidence establishes the observed defect, and which evidence independently establishes intended behavior?
+3. Is the required outcome a normal postcondition, an exceptional postcondition, or both?
+   What is the weakest complete postcondition supported by the evidence, including every explicit variant that would expose a partial fix?
+4. Can a witness reach the selected existing operation and observe the requested behavior, including behavior
+   on an object constructed there when the requested method does not yet exist?
+5. Is each support relation tied only to evidence supplied by the host?
+6. If any required meaning lacks evidence, should this stage abstain instead of guessing?
+
+The precondition and postcondition may cite different evidence. Include precondition evidence and
+at least one normal_postcondition or exceptional_postcondition evidence item. Use normal_postcondition
+only for successful return behavior. Use exceptional_postcondition for required or prohibited exceptions.
+Always return both postcondition keys. Set the unused key to null; never omit either key.
+For every returned REPAIR obligation, at least one of `normal_postcondition` or
+`exceptional_postcondition` must be a non-empty string. Returning both as null is invalid. If no supported
+postcondition can be stated, return no obligation and provide a non-empty `unsupported_reason` instead.
+{% if packet.evidence_mode | default("canonical_spans") == "canonical_spans" %}
+Select only `span_id` values supplied in `evidence_spans`. Span IDs are opaque references with no semantic
+meaning; reason only from their attached text. Every evidence item must contain exactly `span_id` and `supports`.
+The host owns quotation bytes, so do not reproduce evidence text inside an evidence item.
+{% if prompt_profile == "contract-first-v3" %}
+Represent the precondition as ordered atomic `precondition_clauses`. Each clause must state one independently
+supportable setup or invocation fact and select every canonical `span_id` needed to support that fact. Include
+the same span IDs as `precondition` evidence. Set the top-level `precondition` to the clause strings joined, in order,
+with the literal separator ` AND `. Do not combine separately evidenced facts into one clause. Do not select
+an unrelated span merely to satisfy the schema. At least one precondition clause must select issue evidence
+that establishes the reported contract witness; generic API documentation alone is not the issue-specific
+precondition. Qualification checks this mapping deterministically.
+{% endif %}
+{% else %}
+Each quote must be copied as one exact contiguous verbatim span from the text under its evidence ID.
+Never shorten a quote with `...`, join separate lines, or paraphrase inside the quote field.
+{% endif %}
+Do not propose a violation criterion; trusted host code derives it after grounding.
+Do not describe a proposed patch. A repair_hypothesis is optional and diagnostic only.
+{% if packet.include_rationales | default(false) %}
+In rationale, explain the supporting context explicitly: identify the supplied precondition evidence and what it
+establishes, identify the independent postcondition evidence and what it establishes, then explain why
+their combination entails exactly the minimal caller-visible precondition and normal/exceptional postcondition fields. Do not use an
+evidence ID as a substitute for describing the supporting text. Keep repair_hypothesis separate from this
+evidence argument; the hypothesis is neither evidence nor contract authority.
+{% else %}
+The rationale field is optional and disabled for this run; omit it. Canonical evidence selections and
+precondition-clause mappings remain mandatory and are validated by the host.
+{% endif %}
+
+Return an explicit unsupported_reason instead of inventing behavior.
+
+{% if packet.qualification_feedback is defined %}
+# Required bounded refinement
+The prior NLC review or deterministic grounding check rejected the preceding proposal. Follow
+`qualification_feedback.instruction` exactly. Change only the identified defective clauses or provenance;
+preserve accepted semantics and do not broaden the contract to make executable-contract synthesis easier.
+{% endif %}
+
+# Repair-only scope and justified inference
+Recover the reported failing scenario, not preservation behavior for unrelated or neighboring cases.
+A desired outcome may be derived from issue/docs/tests plus supplied program facts; it need not occur
+verbatim. A symptom alone does not justify choosing a particular exception type, return value, or fix.
+An explicit requested behavior in a feature request is also normative issue evidence. It need not
+already hold in the buggy implementation or existing documentation. Recover only the observable
+behavior the issue actually specifies; do not invent exact formatting or an exception type when absent.
+Never exclude the reported input from the precondition to make a crash disappear. Do not label a value
+invalid merely because the issue gives it approximately (for example, "something like ..."). Preserve the
+actual failure boundary, configuration, decorators, and wrapper structure established by the evidence.
+A setup call returning normally is not the same obligation as a subsequent save/serialization succeeding.
+Do not add global preservation, implementation strategy, logging, exact representation, or type restrictions
+unless they are required by this repair obligation's evidence.
+
+# Current task packet
+{{ packet | tojson }}

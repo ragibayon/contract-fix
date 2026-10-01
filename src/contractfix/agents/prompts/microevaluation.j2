@@ -1,0 +1,7 @@
+Write ONE executable behavioral contract as a JSON object with exactly two string fields: when and ensure.
+Use Python expressions, not assert statements. when is an input-state applicability guard; ensure checks
+outputs/exceptions. Observations: parameters, old[parameter] at entry, result, and error (None for normal
+return or a fully qualified exception name). Allowed: arithmetic, comparisons, Boolean operators, subscripts,
+len/min/max/abs/sum/range/all/any/sorted and bounded generator expressions. No attributes, imports or assignments.
+Do not exclude an input for which the requirement demands behavior.
+{{ packet | tojson }}

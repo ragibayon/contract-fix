@@ -1,0 +1,75 @@
+{
+  "schema_version": "contractfix-reasoning-capabilities/1",
+  "profiles": [
+    {
+      "provider": "openrouter",
+      "model": "deepseek/deepseek-v4-pro-0813",
+      "control": "effort",
+      "efforts": ["low", "high", "max"],
+      "normalized_efforts": {"low": "low", "medium": "high", "high": "high"},
+      "can_disable": true,
+      "accounting": "provider_reported"
+    },
+    {
+      "provider": "openrouter",
+      "model": "qwen/*",
+      "control": "effort",
+      "efforts": ["low", "medium", "high"],
+      "normalized_efforts": {"low": "low", "medium": "medium", "high": "high"},
+      "can_disable": true,
+      "accounting": "provider_reported"
+    },
+    {
+      "provider": "openrouter",
+      "model": "z-ai/glm-5.3",
+      "control": "effort",
+      "efforts": ["low", "medium", "high"],
+      "normalized_efforts": {"low": "low", "medium": "medium", "high": "high"},
+      "can_disable": false,
+      "off_fallback": "low",
+      "accounting": "provider_reported"
+    },
+    {
+      "provider": "openrouter",
+      "model": "google/gemini-3.8-flash",
+      "control": "effort",
+      "efforts": ["low", "medium", "high"],
+      "normalized_efforts": {"low": "low", "medium": "medium", "high": "high"},
+      "can_disable": false,
+      "off_fallback": "low",
+      "accounting": "provider_reported",
+      "request_controls": {
+        "omit_sampling": true
+      }
+    },
+    {
+      "provider": "openrouter",
+      "model": "openai/gpt-5.6-luna",
+      "control": "effort",
+      "efforts": ["low", "medium", "high"],
+      "normalized_efforts": {"low": "low", "medium": "medium", "high": "high"},
+      "can_disable": true,
+      "accounting": "provider_reported",
+      "request_controls": {
+        "omit_sampling": true
+      }
+    },
+    {
+      "provider": "ollama",
+      "model": "qwen3.8:*",
+      "control": "effort",
+      "efforts": ["low", "medium", "high"],
+      "normalized_efforts": {"low": "low", "medium": "medium", "high": "high"},
+      "can_disable": true,
+      "accounting": "unreported"
+    },
+    {
+      "provider": "minsky",
+      "model": "*",
+      "control": "boolean",
+      "efforts": [],
+      "can_disable": true,
+      "accounting": "provider_dependent"
+    }
+  ]
+}

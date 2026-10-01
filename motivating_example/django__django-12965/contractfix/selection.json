@@ -1,0 +1,53 @@
+{
+  "status": "PATCH_SELECTED",
+  "reason": "SELECTED_BY_DECLARED_GATES",
+  "selected_attempt": 5,
+  "selected_patch_sha256": "6640c6e0af3fabf461d5294cc91181e9a79950fb091dd80016661fd2a860eda7",
+  "requested_variant": "enforce",
+  "effective_mode": "EC_ENFORCED",
+  "effective_repair_mode": "EC_ENFORCED",
+  "ec_status": "QUALIFIED",
+  "selection_policy": "hard_gates_then_comparable_checks_repaired_failures_import_readiness_attempt",
+  "selector_version": "repair-selector/3",
+  "selection_mode": "EC_ENFORCED",
+  "strict_v2": true,
+  "candidate_policy": "first_eligible",
+  "ec_conflict_policy": "fallback_after_nlc_review",
+  "validation_scope": "related_visible_tests",
+  "repository_check_status": "PASSED",
+  "repository_validation_status": "PARTIAL",
+  "introduced_failures": [],
+  "repaired_visible_failures": [],
+  "persistent_failures": [],
+  "ec_pass": true,
+  "repository_import_baseline_status": "AVAILABLE",
+  "repository_import_status": "NOT_CHECKED_CANDIDATE",
+  "candidate_pool_sha256": "b5afdb72195eebfab369f9f01b78eb1df540c87ca0321a75a747b22f59c9613e",
+  "paired_selections": {
+    "V1_NLC_CONTEXT": {
+      "selected_attempt": 1,
+      "patch_sha256": "0ddbff96490e344959198efb9fe0ce63f79f33ed1459fd3b8e2774f5cf613df9",
+      "available": true
+    },
+    "V2_EC_ENFORCED": {
+      "selected_attempt": 5,
+      "patch_sha256": "6640c6e0af3fabf461d5294cc91181e9a79950fb091dd80016661fd2a860eda7",
+      "available": true
+    },
+    "CONTRACTFIX_OVERALL": {
+      "selected_attempt": 5,
+      "patch_sha256": "6640c6e0af3fabf461d5294cc91181e9a79950fb091dd80016661fd2a860eda7",
+      "available": true,
+      "selection_mode": "EC_ENFORCED",
+      "reason": "V2_SELECTED",
+      "strict_v2": true
+    },
+    "common_candidate_pool_sha256": "b5afdb72195eebfab369f9f01b78eb1df540c87ca0321a75a747b22f59c9613e",
+    "refinement_lineage_sha256": null,
+    "common_ranking": "comparable_checks_repaired_failures_import_readiness_attempt",
+    "selector_version": "repair-selector/3",
+    "ec_conflict_policy": "fallback_after_nlc_review"
+  },
+  "diagnostic_candidate": null,
+  "ec_conflict_fallback": null
+}

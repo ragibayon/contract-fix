@@ -1,0 +1,52 @@
+# Goal
+Localize only the code needed to recover an executable behavioral contract. Select production repair
+locations separately from the stable callable operation that will be the contracted operation.
+# Analysis checklist
+Before selecting IDs, reason through these questions:
+1. What exact user-visible invocation and failure are reported?
+2. Which supplied code location causes or propagates that failure, and what is only contextual?
+3. Which supplied functions are plausible repair sites, without choosing or designing a patch?
+4. Which stable callable operation should be the contracted operation?
+5. Do the selected source excerpts actually support each choice, or is the available context insufficient?
+# Procedure
+1. Match the reported operation, identifiers and behavior against the supplied source candidates.
+2. If the supplied excerpts are insufficient, set needs_more_context=true and request only targeted context:
+   - expand: target a supplied location ID whose source is truncated;
+   - callers: target a supplied location ID to retrieve functions that call it;
+   - callees: target a supplied location ID to retrieve functions it calls;
+   - search: target a concrete symbol, filename, exception, or issue term.
+3. Otherwise select likely edit sites and an existing callable that a witness can reach while observing the requested behavior.
+4. Before finalizing, check the issue's traceback frames, named helpers, and the selected operation's
+   relevant callees. A public wrapper may skip the relevant mechanism; a called helper may own the
+   faulty behavior. Request missing source along that call path before selecting edit sites.
+   Stop when the supplied code supports both the likely repair sites and the contracted operation.
+5. Never reconstruct, predict, or summarize omitted source. Request it when the decision depends on it.
+6. Trace the reported failure to the code responsible, but do not propose a patch or compare implementation strategies.
+   Preserve uncertainty between plausible repair sites instead of resolving it by speculation.
+# Output
+Return repair_locations, contracted_operation_locations, needs_more_context, and context_requests.
+Use only supplied location IDs. While requesting context, leave both location lists empty. When selecting
+final locations, set needs_more_context=false and leave context_requests empty.
+The two location lists may differ. Do not invent unseen helpers or assume the fix location is the contracted operation.
+If the issue requests a method absent from the buggy version, select an existing constructor or public factory
+that creates the subject only when a witness can perform the requested action after construction and observe
+the result. A parser or dispatcher choice must match the issue's input syntax and configuration; a similarly
+named but inactive route is not a valid contracted operation.
+{% if packet.include_rationales | default(false) %}
+In rationale, summarize the reported invocation/failure and map every selected location to a visible source
+fact in the supplied context. Name the location ID and symbol so the explanation is auditable. For a context
+request, state what decision cannot yet be made and what visible omission makes the requested context necessary.
+{% else %}
+Rationale fields are optional and disabled for this run; omit them. Context requests need only kind and target.
+{% endif %}
+# Failure-boundary discipline
+Follow the complete reported call sequence. A constructor, insertion, or setup call is not automatically
+where a later serialization, save, iteration, or access failure is observed. Choose the supplied public
+operation whose execution exposes the reported failure; request the relevant caller/callee when that
+boundary is not visible. Do not choose a nearby function merely because its name occurs in the issue.
+When the host says this is the final decision round, select only from evidence already returned or explicitly
+request missing context and accept an abstention. Never invent source or location IDs to avoid abstention.
+Keep any requested rationale short (one or two sentences); emit the structured response when the decision is made.
+
+# Current task packet
+{{ packet | tojson }}

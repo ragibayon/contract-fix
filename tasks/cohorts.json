@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "datasets": {
+    "lite": {
+      "name": "princeton-nlp/SWE-bench_Lite",
+      "split": "test",
+      "revision": "6ec7bb89b9342f664a54a6e0a6ea6501d3437cc2"
+    },
+    "verified": {
+      "name": "princeton-nlp/SWE-bench_Verified",
+      "split": "test",
+      "revision": "c104f840cc67f8b6eec6f759ebc8b2693d585d4a"
+    },
+    "multilingual": {
+      "name": "SWE-bench/SWE-bench_Multilingual",
+      "split": "test",
+      "revision": "846e647b9f33c0b51b739d005d13d85493c9af09"
+    }
+  },
+  "cohorts": {
+    "lite_development": {
+      "dataset": "lite",
+      "count": 183
+    },
+    "lite_validation": {
+      "dataset": "lite",
+      "count": 23
+    },
+    "verified_evaluation": {
+      "dataset": "verified",
+      "count": 218,
+      "seed": 42,
+      "sampling": "repository-stratified finite-population 95% confidence, 5% margin"
+    },
+    "multilingual_development": {
+      "dataset": "multilingual",
+      "count": 26
+    },
+    "multilingual_evaluation": {
+      "dataset": "multilingual",
+      "count": 59
+    },
+    "javascript_development": {
+      "dataset": "multilingual",
+      "count": 13,
+      "seed": 20260929
+    },
+    "javascript_evaluation": {
+      "dataset": "multilingual",
+      "count": 30,
+      "seed": 20260929
+    }
+  }
+}

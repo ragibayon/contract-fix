@@ -1,0 +1,27 @@
+{
+  "schema_version": "contractfix-paired-repair-selections/1",
+  "selector_version": "repair-selector/3",
+  "instance_id": "django__django-12965",
+  "requested_variant": "enforce",
+  "candidate_pool_sha256": "b5afdb72195eebfab369f9f01b78eb1df540c87ca0321a75a747b22f59c9613e",
+  "selections": {
+    "V1_NLC_CONTEXT": {
+      "available": true,
+      "selected_attempt": 1,
+      "patch_sha256": "0ddbff96490e344959198efb9fe0ce63f79f33ed1459fd3b8e2774f5cf613df9",
+      "model_patch": "--- a/django/db/models/sql/compiler.py\n+++ b/django/db/models/sql/compiler.py\n@@ -1407,7 +1407,8 @@\n class SQLDeleteCompiler(SQLCompiler):\n     @cached_property\n     def single_alias(self):\n-        return sum(self.query.alias_refcount[t] > 0 for t in self.query.alias_map) == 1\n+        # A query without any joins has at most one alias.\n+        return len(self.query.alias_map) <= 1\n \n     def _as_sql(self, query):\n         result = [\n"
+    },
+    "V2_EC_ENFORCED": {
+      "available": true,
+      "selected_attempt": 5,
+      "patch_sha256": "6640c6e0af3fabf461d5294cc91181e9a79950fb091dd80016661fd2a860eda7",
+      "model_patch": "--- a/django/db/models/sql/compiler.py\n+++ b/django/db/models/sql/compiler.py\n@@ -1407,6 +1407,8 @@\n class SQLDeleteCompiler(SQLCompiler):\n     @cached_property\n     def single_alias(self):\n+        # Ensure base table is in the query\n+        self.query.get_initial_alias()\n         return sum(self.query.alias_refcount[t] > 0 for t in self.query.alias_map) == 1\n \n     def _as_sql(self, query):\n"
+    },
+    "CONTRACTFIX_OVERALL": {
+      "available": true,
+      "selected_attempt": 5,
+      "patch_sha256": "6640c6e0af3fabf461d5294cc91181e9a79950fb091dd80016661fd2a860eda7",
+      "model_patch": "--- a/django/db/models/sql/compiler.py\n+++ b/django/db/models/sql/compiler.py\n@@ -1407,6 +1407,8 @@\n class SQLDeleteCompiler(SQLCompiler):\n     @cached_property\n     def single_alias(self):\n+        # Ensure base table is in the query\n+        self.query.get_initial_alias()\n         return sum(self.query.alias_refcount[t] > 0 for t in self.query.alias_map) == 1\n \n     def _as_sql(self, query):\n"
+    }
+  }
+}

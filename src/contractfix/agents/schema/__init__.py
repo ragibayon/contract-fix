@@ -1,0 +1,1 @@
+"""ContractFix agents schema."""

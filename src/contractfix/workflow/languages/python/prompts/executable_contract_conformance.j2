@@ -1,0 +1,79 @@
+Back-translate each executable contract candidate into natural language, then compare it bidirectionally
+with the frozen grounded obligation. List every required meaning missing from the candidate
+and every unsupported meaning added by it. Also identify semantic duplication between
+candidates. Execution failure is not semantic proof. The repair_hypothesis is diagnostic
+and must not be used in this review. Use the supplied deterministic execution receipt to
+identify which assertions ran, which assertion failed, and whether the contracted operation
+raised or returned. The receipt is diagnostic qualification evidence, not a source of new
+contract meaning. Do not infer logging requirements from a log line. If a reported exception
+was caught and converted into an explicit runtime assertion failure, recognize that as the
+candidate enforcing the corresponding prohibited-exception meaning.
+The current packet's `candidates` array is authoritative. Return exactly one review for each candidate ID
+present there and no review for any other ID. Demonstration candidate IDs belong only to the demonstration;
+never copy a demonstration review or candidate ID into the current answer.
+Treat `execution_trace` as the concise view of the raw execution events. The trace is produced by
+the host, not by candidate `print()` calls; candidate stdout is diagnostic only and never creates a clause.
+Use `assertion_execution` as the authoritative mapping from stable assertion IDs to candidate source lines
+and execution status. `source_line` is a line number, not an assertion count. An assertion with
+`executed: false` imposed no runtime postcondition in that execution. Do not mistake a declared-but-unreached
+assertion for an enforced clause.
+Review only equivalence between the grounded behavioral contract and executable contract. Do not judge
+whether the contract captures the function's complete purpose or whether it encourages a preferred patch.
+
+# Analysis checklist
+Forward direction: map every required NLC clause and witness path to the actual candidate code.
+Reverse direction: identify restrictions not present in the frozen NLC. Check execution/observation scope,
+not full function intent. Check every path required by the obligation. A loop or table-driven harness
+covering these cases is one realization. Do not label it added meaning; splitting required cases across
+incomplete candidates is missing meaning. Report duplicates only when the complete meanings agree.
+
+# Trusted runtime semantics
+The semantic contract consists only of:
+1. the precondition established by the fixed contract witness and invocation; and
+2. the postconditions imposed by explicit runtime contract assertions and exception branches that feed them.
+
+Do not infer an additional postcondition merely because other Python failures would terminate the evaluation
+harness. The trusted host classifies an uncaught exception that is not converted into a runtime contract
+assertion as an evaluation error or wrong failure reason, not as a contract violation. Likewise, import,
+setup, timeout, instrumentation, and monitor failures are operational outcomes rather than contract clauses.
+Normal completion of the harness is not by itself an implicit normal postcondition.
+
+For a prohibited-exception contract, a pattern that catches exactly that exception, records it, and asserts
+that it was not observed means only that the specified exception is prohibited. Uncaught exception classes
+do not become additional prohibited exceptions under the host semantics above.
+
+The contract evaluation harness's complete contract witness and invocation establish the precondition; precondition facts
+need not also appear as assertions. Judge assertions within that fixed witness scope, not
+as universal claims over every possible invocation. A harness that reproduces the supplied
+issue setup does not have to inspect internal transient state such as a nested load result.
+Reject every added behavioral requirement that is absent from the frozen obligation, even if separate
+evidence might support it. Such a strengthening requires its own grounded obligation before use.
+Opaque candidate labels carry no semantic meaning. Two candidates are semantic duplicates when their
+back-translations impose the same behavior, even if their Python syntax or control flow differs.
+In each reason, identify how the contract witness establishes the supplied precondition and map each runtime
+contract assertion's plain-language meaning to the exact grounded postcondition. Explain every missing or added meaning using that comparison;
+do not give an unsupported confidence statement or merely repeat the verdict fields.
+The back-translation must state the complete semantic contract you are reviewing. Every `added_meaning` item
+must identify a substantive extra clause actually present in that back-translation; do not manufacture an
+extra clause from operational behavior excluded by the trusted runtime semantics. If `review_mode` is
+`adjudication`, audit the supplied prior review for exactly these mistakes and return a corrected independent
+verdict rather than deferring to it.
+
+# Complete-but-nondiscriminative is not mistranslated
+A SATISFIED receipt may be supplied for diagnosis. Judge NLC-to-EC meaning independently of whether the
+witness currently fails. An exactly translated partial NLC may be too weak, or its witness may not reproduce
+the bug. Do not invent missing_meaning just to force rejection; the host will not qualify a satisfied REPAIR
+candidate. Conversely, a VIOLATED receipt never by itself proves semantic fidelity.
+Never infer a normal-return promise from an exception-only assertion, nor treat the omission of a required
+output effect as harmless because a no-exception assertion exists. Map each required clause to actual code.
+A test double must simulate only evidence-established dependency behavior; injecting an arbitrary exception
+or fabricating the checked value is not a faithful real-program witness. Check callback argument types,
+identifier representation, configuration/rule options, and warning scope against supplied context. A wrong
+representation comparison or a mock that broadens the reported failure path can fail on both good and bad
+programs; do not approve it merely because the buggy receipt says VIOLATED.
+Keep back_translation <= 2000 characters and reason <= 1500 characters. Give a compact clause-to-assertion
+mapping, not an essay. Return empty missing_meaning and added_meaning lists explicitly only when justified.
+semantically_duplicates may reference only OTHER candidate IDs in this request, never demonstration IDs.
+
+# Current task packet
+{{ packet | tojson }}

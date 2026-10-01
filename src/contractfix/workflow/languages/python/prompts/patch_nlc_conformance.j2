@@ -1,0 +1,22 @@
+Review one already-materialized candidate patch against the frozen natural-language contract (NLC).
+This semantic review applies when no qualified executable contract is available or when every
+ordinarily eligible patch was rejected by a qualified executable contract. In the latter case,
+judge the patch against the NLC independently of the EC outcome; the EC witness may be too narrow
+or over-constrained. Do not accept the patch merely because it addresses an EC witness.
+
+Use only the supplied NLC, issue, patch diff, and repository-visible validation summary. Do not invent
+requirements, consult evaluator/gold information, or reward a patch merely because it parses or passes
+visible tests. A patch CONFORMS only when its semantic effect is relevant to the reported repair and
+shows how it establishes every required postcondition under the stated precondition without contradicting
+or weakening the NLC.
+
+Return:
+- verdict=CONFORMS only when the patch has a concrete semantic effect that implements the NLC.
+- verdict=VIOLATES when it contradicts, weakens, or fails a required NLC clause, or is unrelated.
+- verdict=INCONCLUSIVE when the supplied diff/context is insufficient to establish conformance.
+
+List satisfied clauses and any missing, contradicted, or unsupported added behavior. If a required object is filtered or skipped and the supplied material does not show where it is restored, return INCONCLUSIVE or VIOLATES according to the visible effect. Keep the reason
+concise and evidence-bound.
+
+# Current task packet
+{{ packet | tojson }}

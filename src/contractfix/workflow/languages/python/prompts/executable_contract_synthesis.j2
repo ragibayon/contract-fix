@@ -1,0 +1,108 @@
+Choose and write between one and {{ packet.candidate_limit | default(4) }} standalone contract evaluation
+harnesses for the same frozen REPAIR contract. Prefer one candidate covering every frozen clause and required
+branch with no unrelated assertion. Add another only when
+it is materially distinct and useful; never add one merely because multiple candidates are permitted. One
+complete candidate is mandatory and sufficient; `candidate_limit` is only a maximum, never a requested
+count, and no exact candidate count is required. Each source must define contractfix_contract(), construct the
+contract witness, invoke the declared contracted operation, capture the relevant outcome, and use ordinary
+descriptive runtime contract assertions. Use ordinary Python and repository imports. Do not edit files,
+spawn processes, use the network, inspect environment secrets, or redefine the supplied
+expected violation. Candidate IDs are opaque ordering labels and carry no semantic meaning.
+Never place obligation IDs, evidence IDs, candidate roles, or `CF:` labels in generated Python.
+Additional candidates are independent executable realizations of exactly the same frozen behavior.
+They may converge semantically, but do not knowingly submit a redundant realization: never invent a stronger
+or different requirement merely to create diversity. They must not add stronger requirements. Candidate diversity is selection metadata, not a
+qualification requirement.
+Each candidate must be complete by itself. If the grounded precondition or required behavior contains
+multiple material alternatives, branches, or witness paths, one candidate must evaluate every required path
+that is necessary to establish the full obligation. Do not split complementary paths across candidate IDs and
+then treat those partial harnesses as alternatives. A small data-driven loop inside one harness is appropriate.
+Return Python only through `source_lines`: one physical source line per JSON array element. Do not return a
+multiline `source` string and do not place `\n`, `\r`, or other newline escape sequences inside an element.
+The line array must contain the complete function body, not a signature, outline, placeholder, or fragment.
+Before returning, mentally join the lines and verify that the resulting source contains the witness,
+contracted-operation call, and at least one reachable `assert` statement.
+The contract evaluation harness evaluates the frozen behavioral contract; it must not test a guessed implementation strategy,
+internal helper intent, or unrelated desirable behavior.
+
+# Completion discipline
+Submit one complete candidate after checking syntax and semantics. Do not repeatedly debate the
+frozen witness, invent diversity, or reconstruct library APIs from memory; use the supplied base context.
+
+Qualification executes the candidate on the buggy checkout before any semantic conformance review. The
+candidate must import successfully, reach the declared operation, exercise its runtime assertions, and expose
+the evidence-backed bug by violating the frozen postcondition for the intended reason. An assertion that only
+checks a broad return type, non-nullness, or another fact already true on the buggy checkout is insufficient.
+Execution or witness failures are returned for bounded failure-directed correction. Semantic conformance
+also reviews a healthy, fully exercised SATISFIED candidate to diagnose non-discrimination; this cannot
+qualify a REPAIR contract. Do not strengthen the NLC or manufacture a violation merely to fail on buggy code.
+
+When `repository_execution_examples` is present, use it as mechanical guidance for imports, constructors,
+fixtures, and valid invocation patterns from the base repository. It is usage context only: it cannot add,
+remove, or strengthen any clause in the frozen obligation. Prefer adapting a repository-native witness over
+guessing a library API from memory. Verify that the adapted witness reaches the exact contracted operation
+and the exact failure boundary described by the issue; a nearby repository test may exercise a different
+already-handled boundary.
+When an example receives pytest fixtures, inspect its `fixture_context` and explicitly reproduce the
+necessary object construction and active context in the standalone harness. Fixtures are not injected into
+contractfix_contract(). A command invocation returning a setup error is not evidence that its callback ran.
+Do not count setup assertions or dependency compatibility failures as a violation of the repair obligation.
+Use `repository_call_context` the same way for production call sites, helper construction, and version-correct
+imports. It is also usage-only context and cannot establish intended behavior. When test/example context and
+production call context disagree, follow the API available in the base checkout and preserve the frozen NLC.
+
+If public construction normalizes a reported value, do not inject an exception merely to match the expected
+exception name. Prefer an evidence-backed native witness. A test double is permissible only when supplied
+issue/source evidence independently establishes the specific dependency behavior being simulated, not merely
+because it causes the checker to fail. Never replace the contracted operation, fabricate its result, or bypass
+its relevant validation. An approximate issue value is not authority for a guessed invalid internal state.
+
+# Analysis checklist
+Confirm the witness, exact operation, caller-visible outcome, reachable assertions, and every required
+branch. Could witness construction fail before the operation, or could exception handling hide or
+manufacture the failure? Once these checks
+are complete, invoke the response tool; reopen a decision only for a concrete defect, not another possible
+implementation. One complete candidate is sufficient.
+
+If prior_candidate_feedback is present, treat it as a failure-directed correction receipt, not a generic
+request to try again. For each rejected candidate, read `failure_owner`, the exact runtime events and
+exception detail, the host-rendered `execution_trace`, the conformance back-translation,
+missing/added meanings, and `required_action`.
+Change only the layer named by that receipt while keeping the grounded precondition and postcondition fixed.
+For an unreached operation, repair setup/invocation. For an operation that raised before assertions, decide
+from the receipt whether to capture that evidence-backed outcome or repair an accidental witness error. For
+missing/added meaning, change only the runtime assertions identified by the semantic review. Do not repeat
+the same witness, invocation, exception path, unreachable assertion, or unsupported clause. A
+`DIVERSITY_SEARCH` receipt asks for an independent evidence-equivalent realization, never a stronger contract.
+Do not add `print()` calls merely to create a trace. The host supplies the authoritative operation,
+exception, and assertion trace after execution; generated output cannot substitute for that receipt.
+
+{% if packet.include_rationales | default(false) %}
+For each candidate rationale, map the evidence-backed precondition to the contract witness and invocation,
+then map the grounded normal or exceptional postcondition to every runtime contract assertion. Refer to concrete repository symbols and behavioral text,
+not obligation/evidence/candidate IDs. Explicitly explain why the assertions are minimal and add no unsupported
+requirement.
+{% else %}
+Candidate rationale fields are optional and disabled for this run; omit them. Return the executable contract
+source and candidate ID only.
+{% endif %}
+
+# Executable artifact discipline
+Use syntax and APIs available in the historical task environment, not the host interpreter or current library
+version. Do not rewrite repository files, replace production objects, or mutate imported modules and dependency
+globals. A witness must not add process-local compatibility aliases to make a broken base import succeed. If the
+unmodified target cannot import in the pinned runtime, EC qualification is unavailable; a later production patch
+may address a repository-owned compatibility defect, but the contract witness may not hide it.
+For an expected/prohibited exception, capture the observed outcome of the REAL operation and assert on that
+outcome on the normal path too. Do not use an assertion only inside an exception handler; it can be dead when
+no exception occurs. Keep setup outside the protected operation call so setup errors cannot masquerade as bugs.
+Check required values/effects, not just return type or truthiness. For callback arguments, field names, tags,
+and rule codes, establish the actual representation from supplied API/source context before comparison; do
+not assume a string identifier is an integer or vice versa. Keep warning capture scoped to the reported
+operation and warning, not unrelated setup or arbitrary library warnings. A dependency test double must not
+emit on every attribute lookup when the evidence describes one specific lookup. Do not split required branches into separate
+partial candidates. Keep source_lines <= 100 physical lines, <= 24000 characters total, with no literal newlines
+inside array elements. Use short descriptive assertion messages; rationale, when requested, <= 1200 characters.
+
+# Current task packet
+{{ packet | tojson }}
